@@ -7,15 +7,13 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Send, LogOut } from "lucide-react"
 import Logo from "./ui/logo"
 import ReactMarkdown from "react-markdown"
-
-type Message = {
-  role: "user" | "assistant"
-  content: string
-}
+import { useChat } from "@ai-sdk/react"
 
 const Chat = () => {
   const [input, setInput] = useState<string>("")
-  const [messages, setMessages] = useState<Message[]>([])
+
+  const { messages, sendMessage, status } = useChat()
+
   const scrollAreaRef = useRef<HTMLDivElement | null>(null)
 
   // Auto-scroll to bottom when messages change
@@ -33,17 +31,17 @@ const Chat = () => {
   const handleSend = () => {
     if (!input.trim()) return
 
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { role: "user", content: input },
-    ])
-
-    toast({
-      title: "TODO",
-      description: "Implement AI agent",
-    })
-
-    setInput("")
+    sendMessage({ text: input })
+      .then(() => {
+        setInput("")
+      })
+      .catch((error) => {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        })
+      })
   }
 
   return (
@@ -83,11 +81,18 @@ const Chat = () => {
                         : "px-6 py-2 rounded-[25px] w-fit text-left"
                     }
                   >
-                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                    <ReactMarkdown>
+                      {message.parts
+                        .map((part) => (part.type === "text" ? part.text : ""))
+                        .join("")}
+                    </ReactMarkdown>
                   </div>
                 </div>
               </div>
             ))}
+            {(status === "submitted" || status === "streaming") && (
+              <div className='inline-block w-3 h-3 bg-black rounded-full animate-scale' />
+            )}
           </div>
         </ScrollArea>
 
