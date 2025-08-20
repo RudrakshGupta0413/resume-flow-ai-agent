@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Sparkle from "@/components/ui/sparkle"
 
@@ -128,15 +127,12 @@ const LoginPage = () => {
 
             {/* Login Button */}
             <div className='space-y-4'>
-              <Button
-                variant='login'
-                size='lg'
-                className='w-full h-12 text-base font-semibold  relative group cursor-pointer'
+              <a
+                href='/auth/login'
+                className='block w-full font-semibold cursor-pointer text-card-foreground border border-border bg-muted text-primary hover:bg-primary hover:text-white hover:shadow-card-hover transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] rounded-md px-8 py-3'
               >
-                <div className='flex uppercase items-center gap-3'>
-                  <span>Get Started</span>
-                </div>
-              </Button>
+                Get Started
+              </a>
 
               <p className='text-xs text-muted-foreground mt-4 leading-relaxed'>
                 By continuing, you agree to our{" "}
