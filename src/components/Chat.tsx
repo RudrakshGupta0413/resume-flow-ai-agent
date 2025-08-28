@@ -4,12 +4,16 @@ import { Button } from "@/components/ui/button"
 import { toast } from "@/hooks/use-toast"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Send, LogOut } from "lucide-react"
+import { Send, LogOut, Plus } from "lucide-react"
 import Logo from "./ui/logo"
 import ReactMarkdown from "react-markdown"
 import { useChat } from "@ai-sdk/react"
 
-const Chat = () => {
+type ChatProps = {
+  githubUrl: string
+}
+
+const Chat = ({ githubUrl }: ChatProps) => {
   const [input, setInput] = useState<string>("")
 
   const { messages, sendMessage, status } = useChat()
@@ -52,12 +56,21 @@ const Chat = () => {
         <div className='border-b border-border p-4'>
           <div className='flex items-center justify-between'>
             <Logo mode='dark' />
-            <a
-              href='/auth/logout'
-              className='inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-secondary h-10 w-10 text-secondary-foreground hover:bg-secondary/80'
-            >
-              <LogOut className='w-5 h-5' />
-            </a>
+            <div className='flex gap-3'>
+              <a
+                className='cursor-pointer flex items-center font-bold text-sm  rounded px-3 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                href={githubUrl}
+              >
+                <Plus className='w-4 h-4 mr-2' />
+                Connect Github
+              </a>
+              <a
+                href='/auth/logout'
+                className='inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-secondary h-10 w-10 text-secondary-foreground hover:bg-secondary/80'
+              >
+                <LogOut className='w-5 h-5' />
+              </a>
+            </div>
           </div>
         </div>
 
