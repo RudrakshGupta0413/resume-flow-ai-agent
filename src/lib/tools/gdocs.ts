@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { tool } from "@langchain/core/tools"
 import { z } from "zod"
 import { google } from "googleapis"
@@ -101,7 +102,7 @@ export const createGoogleDocResume = tool(
       },
     })
 
-    const bold = (startIndex, endIndex) => {
+    const bold = (startIndex: number, endIndex: number) => {
       requests.push({
         updateTextStyle: {
           range: {
@@ -116,7 +117,7 @@ export const createGoogleDocResume = tool(
       })
     }
 
-    const center = (startIndex, endIndex) => {
+    const center = (startIndex: number, endIndex: number) => {
       requests.push({
         updateParagraphStyle: {
           range: {

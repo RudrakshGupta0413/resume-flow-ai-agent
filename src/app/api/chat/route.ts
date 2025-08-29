@@ -6,7 +6,10 @@ import { convertVercelMessageToLangChainMessage } from "@/lib/message-converters
 import { toUIMessageStream } from "@ai-sdk/langchain"
 import { createUIMessageStreamResponse } from "ai"
 import { createGoogleDocResume, readGoogleDocContent } from "@/lib/tools/gdocs"
-import { GmailCreateDraft, GmailSendMessage } from "@langchain/community/tools/gmail"
+import {
+  GmailCreateDraft,
+  GmailSendMessage,
+} from "@langchain/community/tools/gmail"
 import { getAccessToken, withGoogleConnection } from "@/lib/auth0-ai"
 
 const AGENT_SYSTEM_TEMPLATE = `You are ResumeFlow, an intelligent and supportive AI agent that helps users create, review, and optimize resumes tailored to specific job descriptions.
@@ -71,8 +74,13 @@ export async function POST(req: NextRequest) {
     return createUIMessageStreamResponse({
       stream: toUIMessageStream(eventStream),
     })
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error(e)
-    return NextResponse.json({ error: e.message }, { status: e.status ?? 500 })
+
+    if (e instanceof Error) {
+      return NextResponse.json({ error: e.message }, { status: 500 })
+    }
+
+    return NextResponse.json({ error: "Unexpected error" }, { status: 500 })
   }
 }
